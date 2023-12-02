@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["RegionChange"],"struct":["DummyCatalogList","DummyCatalogProvider","DummySchemaProvider","DummyTableProvider","DummyTableProviderFactory","RegionServer","RegionServerInner","RegionStat"],"trait":["TableProviderFactory"],"type":["TableProviderFactoryRef"]};
