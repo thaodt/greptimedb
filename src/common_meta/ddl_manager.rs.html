@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/common/meta/src/ddl_manager.rs`."><title>ddl_manager.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-deb46770fd761b69.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="common_meta" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (249624b50 2023-10-20)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f34af1a0ee6bacd.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/common/meta/src/ddl_manager.rs`."><title>ddl_manager.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-804b98a1284a310a.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="common_meta" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (3f28fe133 2023-12-18)" data-channel="nightly" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -502,26 +503,50 @@
 <a href="#502" id="502">502</a>
 <a href="#503" id="503">503</a>
 <a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
+<a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
+<a href="#512" id="512">512</a>
+<a href="#513" id="513">513</a>
+<a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Greptime Team
 //
-// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-</span><span class="kw">use </span>std::sync::Arc;
+</span><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>common_procedure::{watcher, ProcedureId, ProcedureManagerRef, ProcedureWithId};
 <span class="kw">use </span>common_telemetry::tracing_context::{FutureExt, TracingContext};
 <span class="kw">use </span>common_telemetry::{info, tracing};
 <span class="kw">use </span>snafu::{OptionExt, ResultExt};
+<span class="kw">use </span>store_api::storage::RegionNumber;
 
 <span class="kw">use </span><span class="kw">crate</span>::cache_invalidator::CacheInvalidatorRef;
 <span class="kw">use </span><span class="kw">crate</span>::datanode_manager::DatanodeManagerRef;
@@ -530,7 +555,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::ddl::drop_table::DropTableProcedure;
 <span class="kw">use </span><span class="kw">crate</span>::ddl::truncate_table::TruncateTableProcedure;
 <span class="kw">use </span><span class="kw">crate</span>::ddl::{
-    DdlContext, DdlTaskExecutor, ExecutorContext, TableMetadataAllocatorContext,
+    DdlContext, DdlTaskExecutor, ExecutorContext, TableMetadata, TableMetadataAllocatorContext,
     TableMetadataAllocatorRef,
 };
 <span class="kw">use </span><span class="kw">crate</span>::error::{
@@ -541,6 +566,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::key::table_name::TableNameKey;
 <span class="kw">use </span><span class="kw">crate</span>::key::table_route::TableRouteValue;
 <span class="kw">use </span><span class="kw">crate</span>::key::{DeserializedValueWithBytes, TableMetadataManagerRef};
+<span class="kw">use </span><span class="kw">crate</span>::region_keeper::MemoryRegionKeeperRef;
 <span class="kw">use </span><span class="kw">crate</span>::rpc::ddl::DdlTask::{AlterTable, CreateTable, DropTable, TruncateTable};
 <span class="kw">use </span><span class="kw">crate</span>::rpc::ddl::{
     AlterTableTask, CreateTableTask, DropTableTask, SubmitDdlTaskRequest, SubmitDdlTaskResponse,
@@ -555,7 +581,8 @@
     datanode_manager: DatanodeManagerRef,
     cache_invalidator: CacheInvalidatorRef,
     table_metadata_manager: TableMetadataManagerRef,
-    table_meta_allocator: TableMetadataAllocatorRef,
+    table_metadata_allocator: TableMetadataAllocatorRef,
+    memory_region_keeper: MemoryRegionKeeperRef,
 }
 
 <span class="kw">impl </span>DdlManager {
@@ -565,14 +592,16 @@
         datanode_clients: DatanodeManagerRef,
         cache_invalidator: CacheInvalidatorRef,
         table_metadata_manager: TableMetadataManagerRef,
-        table_meta_allocator: TableMetadataAllocatorRef,
+        table_metadata_allocator: TableMetadataAllocatorRef,
+        memory_region_keeper: MemoryRegionKeeperRef,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>manager = <span class="self">Self </span>{
             procedure_manager,
             datanode_manager: datanode_clients,
             cache_invalidator,
             table_metadata_manager,
-            table_meta_allocator,
+            table_metadata_allocator,
+            memory_region_keeper,
         };
         manager.register_loaders()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(manager)
@@ -589,6 +618,7 @@
             datanode_manager: <span class="self">self</span>.datanode_manager.clone(),
             cache_invalidator: <span class="self">self</span>.cache_invalidator.clone(),
             table_metadata_manager: <span class="self">self</span>.table_metadata_manager.clone(),
+            memory_region_keeper: <span class="self">self</span>.memory_region_keeper.clone(),
         }
     }
 
@@ -674,12 +704,18 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         cluster_id: u64,
         create_table_task: CreateTableTask,
-        region_routes: Vec&lt;RegionRoute&gt;,
+        table_route: TableRouteValue,
+        region_wal_options: HashMap&lt;RegionNumber, String&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;ProcedureId&gt; {
         <span class="kw">let </span>context = <span class="self">self</span>.create_context();
 
-        <span class="kw">let </span>procedure =
-            CreateTableProcedure::new(cluster_id, create_table_task, region_routes, context);
+        <span class="kw">let </span>procedure = CreateTableProcedure::new(
+            cluster_id,
+            create_table_task,
+            table_route,
+            region_wal_options,
+            context,
+        );
 
         <span class="kw">let </span>procedure_with_id = ProcedureWithId::with_random_id(Box::new(procedure));
 
@@ -766,11 +802,10 @@
         table_name: table_ref.to_string(),
     })<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>table_route_value = table_route_value.with_context(|| error::TableRouteNotFoundSnafu {
-        table_name: table_ref.to_string(),
-    })<span class="question-mark">?</span>;
+    <span class="kw">let </span>table_route_value =
+        table_route_value.context(error::TableRouteNotFoundSnafu { table_id })<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>table_route = table_route_value.into_inner().region_routes;
+    <span class="kw">let </span>table_route = table_route_value.into_inner().region_routes().clone();
 
     <span class="kw">let </span>id = ddl_manager
         .submit_truncate_table_task(
@@ -781,7 +816,7 @@
         )
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="macro">info!</span>(<span class="string">&quot;Table: {table_id} is truncated via procedure_id {id:?}&quot;</span>);
+    <span class="macro">info!</span>(<span class="string">"Table: {table_id} is truncated via procedure_id {id:?}"</span>);
 
     <span class="prelude-val">Ok</span>(SubmitDdlTaskResponse {
         key: id.to_string().into(),
@@ -823,7 +858,7 @@
         .submit_alter_table_task(cluster_id, alter_table_task, table_info_value)
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="macro">info!</span>(<span class="string">&quot;Table: {table_id} is altered via procedure_id {id:?}&quot;</span>);
+    <span class="macro">info!</span>(<span class="string">"Table: {table_id} is altered via procedure_id {id:?}"</span>);
 
     <span class="prelude-val">Ok</span>(SubmitDdlTaskResponse {
         key: id.to_string().into(),
@@ -847,9 +882,8 @@
         table_name: table_ref.to_string(),
     })<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>table_route_value = table_route_value.with_context(|| error::TableRouteNotFoundSnafu {
-        table_name: table_ref.to_string(),
-    })<span class="question-mark">?</span>;
+    <span class="kw">let </span>table_route_value =
+        table_route_value.context(error::TableRouteNotFoundSnafu { table_id })<span class="question-mark">?</span>;
 
     <span class="kw">let </span>id = ddl_manager
         .submit_drop_table_task(
@@ -860,7 +894,7 @@
         )
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="macro">info!</span>(<span class="string">&quot;Table: {table_id} is dropped via procedure_id {id:?}&quot;</span>);
+    <span class="macro">info!</span>(<span class="string">"Table: {table_id} is dropped via procedure_id {id:?}"</span>);
 
     <span class="prelude-val">Ok</span>(SubmitDdlTaskResponse {
         key: id.to_string().into(),
@@ -873,20 +907,32 @@
     cluster_id: u64,
     <span class="kw-2">mut </span>create_table_task: CreateTableTask,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;SubmitDdlTaskResponse&gt; {
-    <span class="kw">let </span>(table_id, region_routes) = ddl_manager
-        .table_meta_allocator
+    <span class="kw">let </span>table_meta = ddl_manager
+        .table_metadata_allocator
         .create(
             <span class="kw-2">&amp;</span>TableMetadataAllocatorContext { cluster_id },
-            <span class="kw-2">&amp;mut </span>create_table_task.table_info,
-            <span class="kw-2">&amp;</span>create_table_task.partitions,
+            <span class="kw-2">&amp;</span>create_table_task,
         )
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
+    <span class="kw">let </span>TableMetadata {
+        table_id,
+        table_route,
+        region_wal_options,
+    } = table_meta;
+
+    create_table_task.table_info.ident.table_id = table_id;
+
     <span class="kw">let </span>id = ddl_manager
-        .submit_create_table_task(cluster_id, create_table_task, region_routes)
+        .submit_create_table_task(
+            cluster_id,
+            create_table_task,
+            table_route,
+            region_wal_options,
+        )
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="macro">info!</span>(<span class="string">&quot;Table: {table_id:?} is created via procedure_id {id:?}&quot;</span>);
+    <span class="macro">info!</span>(<span class="string">"Table: {table_id:?} is created via procedure_id {id:?}"</span>);
 
     <span class="prelude-val">Ok</span>(SubmitDdlTaskResponse {
         key: id.to_string().into(),
@@ -906,10 +952,10 @@
             .as_ref()
             .map(TracingContext::from_w3c)
             .unwrap_or(TracingContext::from_current_span())
-            .attach(<span class="macro">tracing::info_span!</span>(<span class="string">&quot;DdlManager::submit_ddl_task&quot;</span>));
+            .attach(<span class="macro">tracing::info_span!</span>(<span class="string">"DdlManager::submit_ddl_task"</span>));
         <span class="kw">async move </span>{
             <span class="kw">let </span>cluster_id = ctx.cluster_id.unwrap_or_default();
-            <span class="macro">info!</span>(<span class="string">&quot;Submitting Ddl task: {:?}&quot;</span>, request.task);
+            <span class="macro">info!</span>(<span class="string">"Submitting Ddl task: {:?}"</span>, request.task);
             <span class="kw">match </span>request.task {
                 CreateTable(create_table_task) =&gt; {
                     handle_create_table_task(<span class="self">self</span>, cluster_id, create_table_task).<span class="kw">await
@@ -934,9 +980,7 @@
 </span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::sync::Arc;
 
-    <span class="kw">use </span>api::v1::meta::Partition;
     <span class="kw">use </span>common_procedure::local::LocalManager;
-    <span class="kw">use </span>table::metadata::{RawTableInfo, TableId};
 
     <span class="kw">use </span><span class="kw">super</span>::DdlManager;
     <span class="kw">use </span><span class="kw">crate</span>::cache_invalidator::DummyCacheInvalidator;
@@ -945,12 +989,13 @@
     <span class="kw">use </span><span class="kw">crate</span>::ddl::create_table::CreateTableProcedure;
     <span class="kw">use </span><span class="kw">crate</span>::ddl::drop_table::DropTableProcedure;
     <span class="kw">use </span><span class="kw">crate</span>::ddl::truncate_table::TruncateTableProcedure;
-    <span class="kw">use </span><span class="kw">crate</span>::ddl::{TableMetadataAllocator, TableMetadataAllocatorContext};
+    <span class="kw">use </span><span class="kw">crate</span>::ddl::{TableMetadata, TableMetadataAllocator, TableMetadataAllocatorContext};
     <span class="kw">use </span><span class="kw">crate</span>::error::Result;
     <span class="kw">use </span><span class="kw">crate</span>::key::TableMetadataManager;
     <span class="kw">use </span><span class="kw">crate</span>::kv_backend::memory::MemoryKvBackend;
     <span class="kw">use </span><span class="kw">crate</span>::peer::Peer;
-    <span class="kw">use </span><span class="kw">crate</span>::rpc::router::RegionRoute;
+    <span class="kw">use </span><span class="kw">crate</span>::region_keeper::MemoryRegionKeeper;
+    <span class="kw">use </span><span class="kw">crate</span>::rpc::ddl::CreateTableTask;
     <span class="kw">use </span><span class="kw">crate</span>::state_store::KvStateStore;
 
     <span class="doccomment">/// A dummy implemented [DatanodeManager].
@@ -971,9 +1016,8 @@
         <span class="kw">async fn </span>create(
             <span class="kw-2">&amp;</span><span class="self">self</span>,
             _ctx: <span class="kw-2">&amp;</span>TableMetadataAllocatorContext,
-            _table_info: <span class="kw-2">&amp;mut </span>RawTableInfo,
-            _partitions: <span class="kw-2">&amp;</span>[Partition],
-        ) -&gt; <span class="prelude-ty">Result</span>&lt;(TableId, Vec&lt;RegionRoute&gt;)&gt; {
+            _task: <span class="kw-2">&amp;</span>CreateTableTask,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;TableMetadata&gt; {
             <span class="macro">unimplemented!</span>()
         }
     }
@@ -992,6 +1036,7 @@
             Arc::new(DummyCacheInvalidator),
             table_metadata_manager,
             Arc::new(DummyTableMetadataAllocator),
+            Arc::new(MemoryRegionKeeper::default()),
         );
 
         <span class="kw">let </span>expected_loaders = <span class="macro">vec!</span>[
